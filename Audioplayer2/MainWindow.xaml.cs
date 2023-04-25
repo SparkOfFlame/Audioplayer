@@ -13,7 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-///using Microsoft.Win32;
+
+
 
 namespace AudioPlayer
 {
@@ -25,13 +26,39 @@ namespace AudioPlayer
         public MainWindow()
         {
             InitializeComponent();
-        }
+            string PathConfig = @"C:\NTPlayer";
+            if (Directory.Exists(PathConfig))
+            {
+                GetConfig(PathConfig);
+            }
+            else
+            {
+                Directory.CreateDirectory(PathConfig);
+                SetConfig(PathConfig);
+            }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+
+        }
+        MediaPlayer Player = new MediaPlayer();
+
+
+        void SetConfig(string path)
         {
 
-        }
 
+        }
+        void GetConfig(string path)
+        {
+            string[] files = Directory.GetFiles(path, "*.cfg");
+            /// LastPlayed; MediaLubrury; Queue
+            
+
+
+
+
+
+        }
 
         private void AddMediaButton_Click(object sender, RoutedEventArgs e)
         {
@@ -44,6 +71,10 @@ namespace AudioPlayer
             if (result == true)
             {
                 string[] filenames = filediag.FileNames;
+
+                Player.Open(new Uri(filenames[0]));
+                Player.Play();
+                TextB.Text=Player.Clock;
             }
         }
 

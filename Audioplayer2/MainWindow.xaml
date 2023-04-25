@@ -12,15 +12,17 @@
             <RowDefinition Height="13*"/>
             <RowDefinition Height="204*"/>
         </Grid.RowDefinitions>
-        <Border BorderThickness="1" BorderBrush="#FFB0B0B0" HorizontalAlignment="Left" Height="260" Margin="60,38,0,0" VerticalAlignment="Top" Width="420" Grid.Row="1"/>
+        <Border BorderThickness="1" BorderBrush="#FFB0B0B0" HorizontalAlignment="Left" Height="260" Margin="60,38,0,0" VerticalAlignment="Top" Width="420" Grid.Row="1">
+            <TextBlock x:Name="TextB" TextWrapping="Wrap" Text="TextBlock" Foreground="White"/>
+        </Border>
         <Border BorderThickness="1" BorderBrush="#FFB0B0B0" HorizontalAlignment="Left" Height="434" Margin="590,0,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="210"/>
         <ProgressBar HorizontalAlignment="Left" Height="10" Margin="60,318,0,0" Grid.Row="1" VerticalAlignment="Top" Width="420" BorderBrush="#FFB0B0B0" Background="#FFB0B0B0" Foreground="#FF707070"/>
         <Ellipse HorizontalAlignment="Left" Height="40" Margin="170,338,0,0" Grid.Row="1" Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40"/>
         <Ellipse HorizontalAlignment="Left" Height="40" Margin="250,338,0,0" Grid.Row="1" Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40"/>
         <Ellipse HorizontalAlignment="Left" Height="40" Margin="330,338,0,0" Grid.Row="1" Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40"/>
-        <Slider HorizontalAlignment="Left" Margin="500,38,0,0" VerticalAlignment="Top" Width="20" Height="235" Grid.Row="1" Orientation="Vertical"/>
+        <Slider x:Name="VolumeSlider" HorizontalAlignment="Left" Margin="500,38,0,0" VerticalAlignment="Top" Width="20" Height="235" Grid.Row="1" Orientation="Vertical" RenderTransformOrigin="0.5,0.5" OpacityMask="Black"/>
         <Button x:Name="MediaListButton" Content="Лист медиа" HorizontalAlignment="Left" Margin="591,-1,0,0" VerticalAlignment="Top" Width="105" Foreground="#FFB0B0B0" Background="#FF1F1F1F"/>
         <Button x:Name="QueueButton" Content="Очередь" HorizontalAlignment="Left" Margin="695,-1,0,0" VerticalAlignment="Top" Width="105" Foreground="#FFB0B0B0" Background="#FF1F1F1F"/>
-        <Button x:Name="AddMediaButton" Content="Добавить аудио" HorizontalAlignment="Left" Margin="0,-1,0,0" VerticalAlignment="Top" Width="105" Foreground="#FFB0B0B0" Background="#FF1F1F1F" Click="AddMediaButton_Click"/>
+        <Button x:Name="AddMediaButton" Content="Добавить аудио" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="105" Foreground="#FFB0B0B0" Background="#FF1F1F1F" Click="AddMediaButton_Click"/>
     </Grid>
 </Window>

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TagLib;
 
 
 
@@ -41,7 +42,7 @@ namespace AudioPlayer
 
         }
         MediaPlayer Player = new MediaPlayer();
-
+        string medialist = "";
 
         void SetConfig(string path)
         {
@@ -50,22 +51,77 @@ namespace AudioPlayer
         }
         void GetConfig(string path)
         {
-            string[] files = Directory.GetFiles(path, "*.cfg");
+            /// string[] files = Directory.GetFiles(path, "*.cfg");
             /// LastPlayed; MediaLubrury; Queue
             
-
+            if (System.IO.File.Exists(@"C:\NTPlayer\MediaLibrary.cfg"))
+            { 
+                StreamReader copyCheck = new StreamReader(@"C:\NTPlayer\MediaLibrary.cfg");
+                medialist = copyCheck.ReadToEnd();
+                copyCheck.Close();
+            }
+            if (System.IO.File.Exists(@"C:\NTPlayer\MediaLibrary.cfg"))
+            {
+                StreamReader copyCheck = new StreamReader(@"C:\NTPlayer\MediaLibrary.cfg");
+                medialist = copyCheck.ReadToEnd();
+                copyCheck.Close();
+            }
 
 
 
 
         }
 
+        void AddFiles(string[] path)
+        {
+
+
+
+            ListBoxItem newItem = new ListBoxItem();
+            StreamWriter addfile = new StreamWriter(@"C:\NTPlayer\MediaLibrary.cfg", true);
+            foreach (string a in path)
+            {
+                if (!medialist.Contains(a)) 
+                {
+                    addfile.WriteLine(a);
+                    medialist += "/n" + a;
+                    var file = TagLib.File.Create(a);
+                    MediaListBox.Items.Add(new ListBoxItem().Content=file.Tag.Title);
+                 
+
+                }
+            }
+            addfile.Close();
+        }
+
+
+        void AddToList(string path,ListBoxItem newItem)
+        {
+            ///file.Tag.FirstPerformer +
+            var file = TagLib.File.Create(path);
+            string name = " - " + file.Tag.Artists;
+            if (name.Length > 30)
+            {
+
+            }
+            newItem.Content = name;
+            MediaListBox.Items.Add(newItem);
+        }
+
+
+
+
+
+
+
         private void AddMediaButton_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog filediag = new Microsoft.Win32.OpenFileDialog();
-            filediag.Multiselect = true;
-            filediag.DefaultExt = ".mp3";
-            filediag.Filter = "AudioFiles | *.mp3";
+            Microsoft.Win32.OpenFileDialog filediag = new Microsoft.Win32.OpenFileDialog
+            {
+                Multiselect = true,
+                DefaultExt = ".mp3",
+                Filter = "AudioFiles | *.mp3"
+            };
             Nullable<bool> result = filediag.ShowDialog();
             
             if (result == true)
@@ -74,9 +130,15 @@ namespace AudioPlayer
 
                 Player.Open(new Uri(filenames[0]));
                 Player.Play();
-                TextB.Text=Player.Clock;
+                AddFiles(filenames);
+
             }
         }
 
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Player.Volume = VolumeSlider.Value;
+
+        }
     }
 }

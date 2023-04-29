@@ -28,12 +28,12 @@ namespace AudioPlayer
             string PathConfig = @"C:\NTPlayer";
             if (Directory.Exists(PathConfig))
             {
-                GetConfig(PathConfig);
+                GetConfig();
             }
             else
             {
                 Directory.CreateDirectory(PathConfig);
-                SetConfig(PathConfig);
+                SetConfig();
             }
 
 
@@ -41,39 +41,63 @@ namespace AudioPlayer
         }
         MediaPlayer Player = new MediaPlayer();
         string medialist = "";
+        int nowplaying=-1;
         
 
-        void SetConfig(string path)
+        void SetConfig()
         {
 
 
         }
-        void GetConfig(string path)
+        void GetConfig()
         {
             /// LastPlayed; MediaLubrury; Queue
             
             if (File.Exists(@"C:\NTPlayer\MediaLibrary.cfg"))
-            { 
+            {
+                bool deletefiles = false;
                 StreamReader copyCheck = new StreamReader(@"C:\NTPlayer\MediaLibrary.cfg");
                 medialist = copyCheck.ReadToEnd();
                 copyCheck.Close();
                 string[] mlist = medialist.Split('\n');
                 foreach (string a in mlist)
                 {
-                    if (File.Exists(a))
-                    {
-                        AddToList(a);
+                    if (a.Length > 1)
+                    { 
+                        if (File.Exists(a))
+                            {
+                                AddToList(a);
+                            }
+                        else
+                            {
+                            medialist = medialist.Remove(medialist.IndexOf(a), a.Length + 1);
+                                deletefiles = true;
+                            }
+
                     }
+                   
+                }
+                if (deletefiles)
+                {
+                    Refresh();
                 }
 
             }
 
         }
 
+
+        void Refresh()
+        {
+            StreamWriter rem = new StreamWriter(@"C:\NTPlayer\MediaLibrary.cfg", false);
+            rem.Write(medialist);
+            rem.Close();
+
+        }
+
         void AddFiles(string[] path)
         {
 
-            ListBoxItem newItem = new ListBoxItem();
             StreamWriter addfile = new StreamWriter(@"C:\NTPlayer\MediaLibrary.cfg", true);
             foreach (string a in path)
             {
@@ -92,7 +116,7 @@ namespace AudioPlayer
         {
 
             var meta = new TextBlock();
-            meta.Width = 170;
+            meta.Width = 120;
             meta.TextWrapping = TextWrapping.Wrap;
             string[] aboba = a.Split('\\');
             meta.Text = aboba[aboba.Length - 1];    
@@ -115,8 +139,6 @@ namespace AudioPlayer
             {
                 string[] filenames = filediag.FileNames;
 
-                Player.Open(new Uri(filenames[0]));
-                Player.Play();
                 AddFiles(filenames);
 
             }
@@ -137,6 +159,36 @@ namespace AudioPlayer
         {
             
 
+        }
+
+        private void MediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = MediaListBox.SelectedIndex;
+            TextB.Text = index.ToString();
+            if (index > -1)
+            {
+                string path = medialist.Split('\n')[index];
+                if (File.Exists(path) && nowplaying !=index)
+                {
+                    nowplaying = index;
+                    Player.Open(new Uri(path));
+                    Player.Play();
+                }
+                else
+                {
+                    if (!File.Exists(path))
+                    {
+                        medialist=medialist.Remove(medialist.IndexOf(path), path.Length+1);
+                        MediaListBox.Items.Remove(MediaListBox.SelectedItem);
+                        Refresh();
+                        TextB.Text += "Файл удалён";
+                    }
+                }
+                
+
+            }
+            
+            
         }
     }
 }

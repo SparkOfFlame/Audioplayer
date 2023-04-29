@@ -15,7 +15,7 @@
         <Border BorderThickness="1" BorderBrush="#FFB0B0B0" HorizontalAlignment="Left" Height="260" Margin="60,38,0,0" VerticalAlignment="Top" Width="420" Grid.Row="1">
             <TextBlock x:Name="TextB" TextWrapping="Wrap" Foreground="White"/>
         </Border>
-        <ListBox x:Name="MediaListBox" Background="#FF1F1F1F" BorderBrush="#FF272729" Foreground="White" Margin="591,0,0,0" Grid.Row="1">
+        <ListBox x:Name="MediaListBox" Background="#FF1F1F1F" BorderBrush="#FF272729" Foreground="White" Margin="591,0,0,0" Grid.Row="1" SelectionChanged="MediaListBox_SelectionChanged">
 
         </ListBox>
         <Ellipse HorizontalAlignment="Left" Height="40" Margin="170,338,0,0" Grid.Row="1" Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40"/>

@@ -21,7 +21,7 @@
         <Ellipse HorizontalAlignment="Left" Height="40" Margin="170,338,0,0" Grid.Row="1" Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40"/>
         <Ellipse HorizontalAlignment="Left" Height="40" Margin="330,338,0,0" Grid.Row="1" Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40"/>
         <Slider x:Name="VolumeSlider" HorizontalAlignment="Left" Margin="500,38,0,0" VerticalAlignment="Top" Width="20" Height="235" Grid.Row="1" Orientation="Vertical" RenderTransformOrigin="0.5,0.5" OpacityMask="Black" Maximum="1" ValueChanged="VolumeSlider_ValueChanged" LargeChange="0.1" SmallChange="0.01" Value="0.5"/>
-        <Button x:Name="MediaListButton" Content="Медиа список" HorizontalAlignment="Left" Margin="591,0,0,0" VerticalAlignment="Top" Width="101" Foreground="#FFB0B0B0" Background="#FF761BA0" Height="20"/>
+        <Button x:Name="MediaListButton" Content="Медиа список" HorizontalAlignment="Left" Margin="591,0,0,0" VerticalAlignment="Top" Width="101" Foreground="#FFB0B0B0" Background="#FF761BA0" Height="20" Click="MediaListButton_Click"/>
         <Button x:Name="QueueButton" Content="Очередь" HorizontalAlignment="Left" Margin="691,0,0,0" VerticalAlignment="Top" Width="101" Foreground="#FFB0B0B0" Background="#FF1F1F1F" Height="20"/>
         <Button x:Name="AddMediaButton" Content="Добавить аудио" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="105" Foreground="#FFB0B0B0" Background="#FF1F1F1F" Click="AddMediaButton_Click" Height="20"/>
         <TextBlock x:Name="Time" HorizontalAlignment="Left" Height="15" Margin="490,315,0,0" Grid.Row="1" TextWrapping="Wrap" Text="0:00/0:00" VerticalAlignment="Top" Width="95" Foreground="White"/>

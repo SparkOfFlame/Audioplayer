@@ -12,8 +12,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TagLib;
 
 
 
@@ -54,33 +52,21 @@ namespace AudioPlayer
         {
             /// LastPlayed; MediaLubrury; Queue
             
-            if (System.IO.File.Exists(@"C:\NTPlayer\MediaLibrary.cfg"))
+            if (File.Exists(@"C:\NTPlayer\MediaLibrary.cfg"))
             { 
                 StreamReader copyCheck = new StreamReader(@"C:\NTPlayer\MediaLibrary.cfg");
                 medialist = copyCheck.ReadToEnd();
                 copyCheck.Close();
                 string[] mlist = medialist.Split('\n');
-
-                /*
-               foreach (string a in mlist)
+                foreach (string a in mlist)
                 {
-                    if (a.Length > 1)
+                    if (File.Exists(a))
                     {
-                        MediaListBox.Items.Add(file.Tag.Performers[0] + "-" + file.Tag.Title);
+                        AddToList(a);
                     }
-                    
-                }*/
+                }
 
             }
-            /*if (System.IO.File.Exists(@"C:\NTPlayer\MediaLibrary.cfg"))
-            {
-                StreamReader copyCheck = new StreamReader(@"C:\NTPlayer\MediaLibrary.cfg");
-                medialist = copyCheck.ReadToEnd();
-                copyCheck.Close();
-            }*/
-
-
-
 
         }
 
@@ -96,55 +82,23 @@ namespace AudioPlayer
                     /// Запись в файл
                     addfile.WriteLine(a);
                     medialist += "\n" + a;
-
-                    /// Получение метаданных
-                    var file = TagLib.File.Create(a);
-                    string metadata = "";
-                    foreach (string b in file.Tag.Performers)
-                    {
-                        metadata += b + ' ';
-                    }
-                    metadata += '\n' + file.Tag.Title;
-
-
-                    var meta = new TextBlock();
-                    meta.Width = 170;
-                    meta.TextWrapping = TextWrapping.Wrap;
-                    meta.Text = metadata;
-
-                    if (!(metadata.Length > 1))
-                    {
-                        string[] aboba = a.Split('\\');
-                        meta.Text = aboba[aboba.Length - 1];
-                    }
-                    MediaListBox.Items.Add(meta);
+                    AddToList(a);
                 }
             }
             addfile.Close();
         }
 
-        void Addtolist()
+        void AddToList(string a)
         {
 
+            var meta = new TextBlock();
+            meta.Width = 170;
+            meta.TextWrapping = TextWrapping.Wrap;
+            string[] aboba = a.Split('\\');
+            meta.Text = aboba[aboba.Length - 1];    
+            MediaListBox.Items.Add(meta);
+
         }
-
-        void AddToList(string path,ListBoxItem newItem)
-        {
-            ///file.Tag.FirstPerformer +
-            var file = TagLib.File.Create(path);
-            string name = " - " + file.Tag.Artists;
-            if (name.Length > 30)
-            {
-
-            }
-            newItem.Content = name;
-            MediaListBox.Items.Add(newItem);
-        }
-
-
-
-
-
 
 
         private void AddMediaButton_Click(object sender, RoutedEventArgs e)
@@ -177,6 +131,12 @@ namespace AudioPlayer
         private void PlayPause_Click(object sender, RoutedEventArgs e)
         {
             Player.Pause();
+        }
+
+        private void MediaListButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+
         }
     }
 }

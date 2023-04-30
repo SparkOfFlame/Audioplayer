@@ -15,30 +15,41 @@
         <Border BorderThickness="1" BorderBrush="#FFB0B0B0" HorizontalAlignment="Left" Height="260" Margin="60,38,0,0" VerticalAlignment="Top" Width="420" Grid.Row="1">
             <TextBlock x:Name="TextB" TextWrapping="Wrap" Foreground="White"/>
         </Border>
-        <ListBox x:Name="MediaListBox" Background="#FF1F1F1F" BorderBrush="#FF272729" Foreground="White" Margin="591,0,0,0" Grid.Row="1" SelectionChanged="MediaListBox_SelectionChanged">
+        <ListBox x:Name="MediaListBox" Background="#FF1F1F1F" BorderBrush="#FF272729" Foreground="White" Margin="591,0,0,0" Grid.Row="1" SelectionChanged="MediaListBox_SelectionChanged" Width="201">
+            <ListBoxItem>
+                <Grid Width="20" Height="20" />
+
+            </ListBoxItem>
 
         </ListBox>
         <Ellipse HorizontalAlignment="Left" Height="40" Margin="170,338,0,0" Grid.Row="1" Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40"/>
         <Ellipse HorizontalAlignment="Left" Height="40" Margin="330,338,0,0" Grid.Row="1" Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40"/>
         <Slider x:Name="VolumeSlider" HorizontalAlignment="Left" Margin="500,38,0,0" VerticalAlignment="Top" Width="20" Height="235" Grid.Row="1" Orientation="Vertical" RenderTransformOrigin="0.5,0.5" OpacityMask="Black" Maximum="1" ValueChanged="VolumeSlider_ValueChanged" LargeChange="0.1" SmallChange="0.01" Value="0.5"/>
-        <Button x:Name="MediaListButton" Content="Медиа список" HorizontalAlignment="Left" Margin="591,0,0,0" VerticalAlignment="Top" Width="101" Foreground="#FFB0B0B0" Background="#FF761BA0" Height="20" Click="MediaListButton_Click"/>
+        <Button x:Name="MediaListButton" Content="Медиа список" HorizontalAlignment="Left" Margin="591,0,0,0" VerticalAlignment="Top" Width="101" Foreground="#FF271717" Height="20" Click="MediaListButton_Click">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF16717A" Offset="0"/>
+                    <GradientStop Color="#FF52F9D6" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
         <Button x:Name="QueueButton" Content="Очередь" HorizontalAlignment="Left" Margin="691,0,0,0" VerticalAlignment="Top" Width="101" Foreground="#FFB0B0B0" Background="#FF1F1F1F" Height="20"/>
         <Button x:Name="AddMediaButton" Content="Добавить аудио" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="105" Foreground="#FFB0B0B0" Background="#FF1F1F1F" Click="AddMediaButton_Click" Height="20"/>
         <TextBlock x:Name="Time" HorizontalAlignment="Left" Height="15" Margin="490,315,0,0" Grid.Row="1" TextWrapping="Wrap" Text="0:00/0:00" VerticalAlignment="Top" Width="95" Foreground="White"/>
         <Slider x:Name="Current_Time" HorizontalAlignment="Left" Margin="60,315,0,0" Grid.Row="1" VerticalAlignment="Top" Width="420" Foreground="White" Background="#FF1F1F1F" Height="10" BorderBrush="#FF111111"/>
-        <Button x:Name="PlayPause" Margin="250,338,502,21" Grid.Row="1" Click="PlayPause_Click">
+        <Button Content="" HorizontalAlignment="Left" Margin="250,340,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White" Height="40">
+            <Button.Background>
+                <ImageBrush/>
+            </Button.Background>
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Grid>
-                        <Ellipse Fill="Gray" />
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Ellipse HorizontalAlignment="Left" Height="40"  Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40" Fill="Black"/>
+                        <Image HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40"/>
+
                     </Grid>
                 </ControlTemplate>
             </Button.Template>
-            <TextBlock FontFamily="SimSun" FontSize="36" Height="38" Width="30" />
-            <Button.Effect>
-                <DropShadowEffect BlurRadius="3" Direction="270" ShadowDepth="1" Opacity="0.5" />
-            </Button.Effect>
         </Button>
 
 

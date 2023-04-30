@@ -34,6 +34,7 @@ namespace AudioPlayer
             {
                 Directory.CreateDirectory(PathConfig);
                 SetConfig();
+                MediaListBox.Width = 201;
             }
 
 

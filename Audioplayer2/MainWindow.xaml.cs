@@ -34,15 +34,16 @@ namespace AudioPlayer
             {
                 Directory.CreateDirectory(PathConfig);
                 SetConfig();
-                MediaListBox.Width = 201;
+                
             }
-
+            MediaListBox.Width = 201;
 
 
         }
         MediaPlayer Player = new MediaPlayer();
         string medialist = "";
         int nowplaying=-1;
+        bool playing = true;
         
 
         void SetConfig()
@@ -56,6 +57,7 @@ namespace AudioPlayer
             
             if (File.Exists(@"C:\NTPlayer\MediaLibrary.cfg"))
             {
+                ///var clock=Player.Clock;
                 bool deletefiles = false;
                 StreamReader copyCheck = new StreamReader(@"C:\NTPlayer\MediaLibrary.cfg");
                 medialist = copyCheck.ReadToEnd();
@@ -66,23 +68,21 @@ namespace AudioPlayer
                     if (a.Length > 1)
                     { 
                         if (File.Exists(a))
-                            {
-                                AddToList(a);
-                            }
+                        {
+                             AddToList(a);
+                        }
                         else
-                            {
+                        {
                             medialist = medialist.Remove(medialist.IndexOf(a), a.Length + 1);
-                                deletefiles = true;
-                            }
+                            deletefiles = true;
+                        }
 
                     }
-                   
                 }
                 if (deletefiles)
                 {
                     Refresh();
                 }
-
             }
 
         }
@@ -153,7 +153,18 @@ namespace AudioPlayer
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
         {
-            Player.Pause();
+            if (playing)
+            {
+                Player.Pause();
+                playing = false;
+                
+            }
+            else
+            {
+                Player.Play();
+                playing = true;
+            }
+            
         }
 
         private void MediaListButton_Click(object sender, RoutedEventArgs e)
@@ -173,7 +184,9 @@ namespace AudioPlayer
                 {
                     nowplaying = index;
                     Player.Open(new Uri(path));
+                    
                     Player.Play();
+                   
                 }
                 else
                 {
@@ -190,6 +203,16 @@ namespace AudioPlayer
             }
             
             
+        }
+
+        private void Prev_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Next_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -17,8 +17,14 @@
         </Border>
         <ListBox x:Name="MediaListBox" Background="#FF1F1F1F" BorderBrush="#FF272729" Foreground="White" Margin="591,0,0,0" Grid.Row="1" SelectionChanged="MediaListBox_SelectionChanged" Width="201">
             <ListBoxItem>
-                <Grid Width="20" Height="20" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition>
 
+                        </ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                </Grid>
             </ListBoxItem>
 
         </ListBox>
@@ -34,25 +40,26 @@
         <Button x:Name="QueueButton" Content="Очередь" HorizontalAlignment="Left" Margin="691,0,0,0" VerticalAlignment="Top" Width="101" Foreground="#FFB0B0B0" Background="#FF1F1F1F" Height="20"/>
         <Button x:Name="AddMediaButton" Content="Добавить аудио" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="105" Foreground="#FFB0B0B0" Background="#FF1F1F1F" Click="AddMediaButton_Click" Height="20"/>
         <TextBlock x:Name="Time" HorizontalAlignment="Left" Height="15" Margin="490,315,0,0" Grid.Row="1" TextWrapping="Wrap" Text="0:00/0:00" VerticalAlignment="Top" Width="95" Foreground="White"/>
+       
         <Slider x:Name="Current_Time" HorizontalAlignment="Left" Margin="60,315,0,0" Grid.Row="1" VerticalAlignment="Top" Width="420" Foreground="White" Background="#FF1F1F1F" Height="10" BorderBrush="#FF111111"/>
-        <Button x:Name="PlayPause" Content="" HorizontalAlignment="Left" Margin="250,340,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White" Height="40" Click="PlayPause_Click">
+        <Button x:Name="PlayPause" Content="" HorizontalAlignment="Left" Margin="250,340,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="{x:Null}" Height="40" Click="PlayPause_Click" Width="40" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush/>
             </Button.Background>
             <Button.Template>
-                <ControlTemplate TargetType="Button">
+                <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
-                        <Ellipse x:Name="ButtonImage" HorizontalAlignment="Left" Height="40"  Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40">
+                        <Ellipse x:Name="Im" HorizontalAlignment="Left" Height="40"  Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40">
                             <Ellipse.Fill>
-                                <ImageBrush ImageSource="C:\Users\admin\source\repos\Audioplayer2\Audioplayer2\play.png"/>
+                                <ImageBrush ImageSource="play.png"/>
                             </Ellipse.Fill>
                         </Ellipse>
                         <Image HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40"/>
-
                     </Grid>
                 </ControlTemplate>
             </Button.Template>
         </Button>
+        
         <Button x:Name="Prev" Content="" HorizontalAlignment="Left" Margin="170,338,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White" Height="40" Click="Prev_Click">
             <Button.Background>
                 <ImageBrush/>
@@ -66,7 +73,6 @@
                             </Ellipse.Fill>
                         </Ellipse>
                         <Image HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40"/>
-
                     </Grid>
                 </ControlTemplate>
             </Button.Template>
@@ -78,7 +84,7 @@
             <Button.Template>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
-                        <Ellipse x:Name="ButtonImage" HorizontalAlignment="Left" Height="40"  Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40">
+                        <Ellipse x:Name="ButtonI" HorizontalAlignment="Left" Height="40"  Stroke="#FFB0B0B0" VerticalAlignment="Top" Width="40">
                             <Ellipse.Fill>
                                 <ImageBrush ImageSource="next-button.png"/>
                             </Ellipse.Fill>

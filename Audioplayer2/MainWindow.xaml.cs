@@ -44,7 +44,8 @@ namespace AudioPlayer
         MediaPlayer Player = new MediaPlayer();
         string medialist = "";
         int nowplaying=-1;
-        bool playing = true;
+        bool playing = false;
+        int counter = 0;
         
 
         void SetConfig()
@@ -117,12 +118,44 @@ namespace AudioPlayer
         void AddToList(string a)
         {
 
-            var meta = new TextBlock();
-            meta.Width = 120;
+            TextBlock meta = new TextBlock();
+            meta.Width = 150;
             meta.TextWrapping = TextWrapping.Wrap;
             string[] aboba = a.Split('\\');
-            meta.Text = aboba[aboba.Length - 1];    
-            MediaListBox.Items.Add(meta);
+            meta.Text = aboba[aboba.Length - 1];
+
+            Grid grid = new Grid();
+            ColumnDefinition colDef = new ColumnDefinition();
+            ColumnDefinition colDef2 = new ColumnDefinition();
+
+            colDef.Width = new GridLength(150, GridUnitType.Pixel);
+            colDef2.Width = new GridLength(20, GridUnitType.Pixel);
+
+            grid.ColumnDefinitions.Add(colDef);
+            grid.ColumnDefinitions.Add(colDef2);
+
+            Button button = new Button();
+            button.Width = 20;
+            button.Height = 20;
+            button.Background = null;
+            button.BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x3E, 0x3B, 0x3B));
+            button.Foreground = Brushes.White;
+            button.Content = "X";
+            button.Tag = counter;
+            button.Click += RemoveItem;
+
+            grid.Children.Add(meta);
+            grid.Children.Add(button);
+
+            Grid.SetColumn(meta, 0);
+            Grid.SetColumn(button, 1);
+
+            ListBoxItem item = new ListBoxItem();
+            item.Tag = (counter++).ToString()+"|" + a;
+            item.Content = grid;
+
+            MediaListBox.Items.Add(item);
+            
 
         }
 
@@ -187,10 +220,10 @@ namespace AudioPlayer
                 if (File.Exists(path) && nowplaying !=index)
                 {
                     nowplaying = index;
-                    Player.Open(new Uri(path));
-                    
+                    Player.Open(new Uri(path));   
                     Player.Play();
-                   
+                    playing = true;
+                    (PlayPause.Template.FindName("Im", PlayPause) as Ellipse).Fill = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Audioplayer2;component/pause-button.png")));
                 }
                 else
                 {
@@ -199,7 +232,8 @@ namespace AudioPlayer
                         medialist=medialist.Remove(medialist.IndexOf(path), path.Length+1);
                         MediaListBox.Items.Remove(MediaListBox.SelectedItem);
                         Refresh();
-                        TextB.Text += "Файл удалён";
+                        
+
                     }
                 }
                 
@@ -217,6 +251,25 @@ namespace AudioPlayer
         private void Next_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void RemoveItem(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender; // приведение object к типу Button
+            foreach (var item in MediaListBox.Items)
+            {
+                var lbi = MediaListBox.ItemContainerGenerator.ContainerFromItem(item) as ListBoxItem;
+                string path = lbi.Tag.ToString().Split('|')[1];
+                int tag = int.Parse(lbi.Tag.ToString().Split('|')[0]);
+                if (lbi != null && tag == (int)btn.Tag)
+                {
+                    medialist = medialist.Remove(medialist.IndexOf(path), path.Length + 1);
+                    MediaListBox.Items.Remove(item);
+                    Refresh();
+                    break;
+                }
+
+            }
         }
     }
 }

@@ -1,18 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 
 
@@ -23,43 +17,39 @@ namespace AudioPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
+        readonly MediaPlayer Player = new MediaPlayer();
+        string medialist = "";
+        bool playing = false;
+        int counter = 0;
+        private DispatcherTimer _timer;
         public MainWindow()
         {
             InitializeComponent();
             string PathConfig = @"C:\NTPlayer";
-            if (Directory.Exists(PathConfig))
-            {
-                GetConfig();
-            }
-            else
+            if (!Directory.Exists(PathConfig))
             {
                 Directory.CreateDirectory(PathConfig);
-                SetConfig();
-                
             }
+            GetConfig();
             MediaListBox.Width = 201;
-
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += Timer_tick;
 
         }
-        MediaPlayer Player = new MediaPlayer();
-        string medialist = "";
-        int nowplaying=-1;
-        bool playing = false;
-        int counter = 0;
-        
-
-        void SetConfig()
+        private void Timer_tick(object sender, EventArgs e)
         {
-
+            Current_Time.Value += 1;
 
         }
+
         void GetConfig()
         {
+
+            Player.MediaEnded += Player_MediaEnded;
             /// LastPlayed; MediaLubrury; Queue
-            
             if (File.Exists(@"C:\NTPlayer\MediaLibrary.cfg"))
             {
-                ///var clock=Player.Clock;
                 bool deletefiles = false;
                 StreamReader copyCheck = new StreamReader(@"C:\NTPlayer\MediaLibrary.cfg");
                 medialist = copyCheck.ReadToEnd();
@@ -68,10 +58,10 @@ namespace AudioPlayer
                 foreach (string a in mlist)
                 {
                     if (a.Length > 1)
-                    { 
+                    {
                         if (File.Exists(a))
                         {
-                             AddToList(a);
+                            AddToList(a);
                         }
                         else
                         {
@@ -85,10 +75,15 @@ namespace AudioPlayer
                 {
                     Refresh();
                 }
+
             }
 
         }
 
+        private void Player_MediaEnded(object sender, EventArgs e)
+        {
+            //MediaListBox.SelectedIndex += 1;
+        }
 
         void Refresh()
         {
@@ -104,7 +99,7 @@ namespace AudioPlayer
             StreamWriter addfile = new StreamWriter(@"C:\NTPlayer\MediaLibrary.cfg", true);
             foreach (string a in path)
             {
-                if (!medialist.Contains(a)) 
+                if (!medialist.Contains(a))
                 {
                     /// Запись в файл
                     addfile.WriteLine(a);
@@ -118,9 +113,11 @@ namespace AudioPlayer
         void AddToList(string a)
         {
 
-            TextBlock meta = new TextBlock();
-            meta.Width = 150;
-            meta.TextWrapping = TextWrapping.Wrap;
+            TextBlock meta = new TextBlock
+            {
+                Width = 150,
+                TextWrapping = TextWrapping.Wrap
+            };
             string[] aboba = a.Split('\\');
             meta.Text = aboba[aboba.Length - 1];
 
@@ -134,14 +131,16 @@ namespace AudioPlayer
             grid.ColumnDefinitions.Add(colDef);
             grid.ColumnDefinitions.Add(colDef2);
 
-            Button button = new Button();
-            button.Width = 20;
-            button.Height = 20;
-            button.Background = null;
-            button.BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x3E, 0x3B, 0x3B));
-            button.Foreground = Brushes.White;
-            button.Content = "X";
-            button.Tag = counter;
+            Button button = new Button
+            {
+                Width = 20,
+                Height = 20,
+                Background = null,
+                BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x3E, 0x3B, 0x3B)),
+                Foreground = Brushes.White,
+                Content = "X",
+                Tag = counter
+            };
             button.Click += RemoveItem;
 
             grid.Children.Add(meta);
@@ -150,16 +149,18 @@ namespace AudioPlayer
             Grid.SetColumn(meta, 0);
             Grid.SetColumn(button, 1);
 
-            ListBoxItem item = new ListBoxItem();
-            item.Tag = (counter++).ToString()+"|" + a;
-            item.Content = grid;
+            ListBoxItem item = new ListBoxItem
+            {
+                Tag = (counter++).ToString() + "|" + a,
+                Content = grid
+            };
 
             MediaListBox.Items.Add(item);
-            
+
 
         }
 
-
+        /// Events
         private void AddMediaButton_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog filediag = new Microsoft.Win32.OpenFileDialog
@@ -169,7 +170,7 @@ namespace AudioPlayer
                 Filter = "AudioFiles | *.mp3"
             };
             Nullable<bool> result = filediag.ShowDialog();
-            
+
             if (result == true)
             {
                 string[] filenames = filediag.FileNames;
@@ -190,6 +191,7 @@ namespace AudioPlayer
             if (playing)
             {
                 Player.Pause();
+                _timer.Stop();
                 playing = false;
                 (PlayPause.Template.FindName("Im", PlayPause) as Ellipse).Fill = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Audioplayer2;component/play.png")));
 
@@ -197,65 +199,75 @@ namespace AudioPlayer
             else
             {
                 Player.Play();
+                _timer.Start();
                 playing = true;
                 PlayPause.Background = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Audioplayer2;component/pause-button.png")));
                 (PlayPause.Template.FindName("Im", PlayPause) as Ellipse).Fill = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Audioplayer2;component/pause-button.png")));
             }
-            
+
         }
 
         private void MediaListButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
 
         }
 
         private void MediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int index = MediaListBox.SelectedIndex;
-            TextB.Text = index.ToString();
             if (index > -1)
             {
                 string path = medialist.Split('\n')[index];
-                if (File.Exists(path) && nowplaying !=index)
+                if (path.Length < 2)
                 {
-                    nowplaying = index;
-                    Player.Open(new Uri(path));   
+                    path = medialist.Split('\n')[index + 1];
+                }
+                if (File.Exists(path) && !(Player.Source?.ToString().Contains(path.Replace('\\', '/')) ?? false))
+                {
+                    double dur = new NAudio.Wave.MediaFoundationReader(path).TotalTime.TotalSeconds;
+                    Player.Open(new Uri(path));
                     Player.Play();
+                    _timer.Start();
                     playing = true;
+
+                    Current_Time.Maximum = dur;
+                    Current_Time.Value = 0;
+                    MaxTime.Text = SecToTime(dur, false);
+                    CTime.Text = "0:00";
                     (PlayPause.Template.FindName("Im", PlayPause) as Ellipse).Fill = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Audioplayer2;component/pause-button.png")));
                 }
                 else
                 {
                     if (!File.Exists(path))
                     {
-                        medialist=medialist.Remove(medialist.IndexOf(path), path.Length+1);
+                        medialist = medialist.Remove(medialist.IndexOf(path), path.Length + 1);
                         MediaListBox.Items.Remove(MediaListBox.SelectedItem);
+                        MediaListBox.SelectedIndex = -1;
                         Refresh();
-                        
 
                     }
                 }
-                
+
 
             }
-            
-            
+
+
         }
 
         private void Prev_Click(object sender, RoutedEventArgs e)
         {
-
+            MediaListBox.SelectedIndex -= 1;
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-
+            MediaListBox.SelectedIndex += 1;
         }
 
         private void RemoveItem(object sender, RoutedEventArgs e)
         {
-            Button btn = (Button)sender; // приведение object к типу Button
+            Button btn = (Button)sender;
             foreach (var item in MediaListBox.Items)
             {
                 var lbi = MediaListBox.ItemContainerGenerator.ContainerFromItem(item) as ListBoxItem;
@@ -270,6 +282,50 @@ namespace AudioPlayer
                 }
 
             }
+        }
+
+        private void QueueButton_Click(object sender, RoutedEventArgs e)
+        {
+            TextB.Text = "Не работает, куда тыкаешь";
+
+        }
+
+        private void Current_Time_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (Player.Source != null)
+            {
+                Player.Position = TimeSpan.Parse(SecToTime(Current_Time.Value, true));
+            }
+            _timer.Start();
+
+        }
+
+        private void Current_Time_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            CTime.Text = SecToTime(Current_Time.Value, false);
+        }
+
+        string SecToTime(double value, bool b)
+        {
+            // b - TimeSpan format
+            double h = Math.Floor(value / 360);
+            if (h > 0)
+            {
+                return h.ToString() + ':' + (Math.Floor(value / 60) % 60).ToString() + ':' + Math.Round(value % 60).ToString(); ;
+            }
+            if (b)
+            {
+                return "00:" + (Math.Floor(value / 60) % 60).ToString() + ':' + Math.Round(value % 60).ToString();
+            }
+            else
+            {
+                return (Math.Floor(value / 60) % 60).ToString() + ':' + Math.Round(value % 60).ToString();
+            }
+        }
+
+        private void Current_Time_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _timer.Stop();
         }
     }
 }

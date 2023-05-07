@@ -13,7 +13,6 @@
             <RowDefinition Height="399*"/>
         </Grid.RowDefinitions>
         <Border BorderThickness="1" BorderBrush="#FFB0B0B0" HorizontalAlignment="Left" Height="260" Margin="60,38,0,0" VerticalAlignment="Top" Width="420" Grid.Row="1">
-            <TextBlock x:Name="TextB" TextWrapping="Wrap" Foreground="White"/>
 
         </Border>
         <Border Margin="591,0,0,0" Grid.RowSpan="2">
@@ -99,5 +98,6 @@
                 <TextBlock Name="MaxTime" TextWrapping="Wrap" Text="0:00" Foreground="White" Grid.Column="2"/>
             </Grid>
         </Border>
+        <Image Source="pack://application:,,,/Audioplayer2;component/volume.png" HorizontalAlignment="Left" Height="25" Margin="497,273,0,0" Grid.Row="1" VerticalAlignment="Top" Width="26"/>
     </Grid>
 </Window>

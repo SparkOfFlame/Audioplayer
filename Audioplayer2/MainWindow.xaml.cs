@@ -22,6 +22,7 @@ namespace AudioPlayer
         bool playing = false;
         int counter = 0;
         private DispatcherTimer _timer;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,17 +38,30 @@ namespace AudioPlayer
             _timer.Tick += Timer_tick;
 
         }
+
+        private void TryToGetTime()
+        {
+            try
+            {
+                double dur = TimeSpanToDouble(Player.NaturalDuration.TimeSpan);
+                Current_Time.Maximum = dur;
+                MaxTime.Text = SecToTime(dur, false);
+            }
+            catch
+            {
+                TryToGetTime();
+            }
+        }
+
         private void Timer_tick(object sender, EventArgs e)
         {
             Current_Time.Value += 1;
-
         }
 
         void GetConfig()
         {
 
             Player.MediaEnded += Player_MediaEnded;
-            /// LastPlayed; MediaLubrury; Queue
             if (File.Exists(@"C:\NTPlayer\MediaLibrary.cfg"))
             {
                 bool deletefiles = false;
@@ -82,7 +96,7 @@ namespace AudioPlayer
 
         private void Player_MediaEnded(object sender, EventArgs e)
         {
-            //MediaListBox.SelectedIndex += 1;
+            MediaListBox.SelectedIndex += 1;
         }
 
         void Refresh()
@@ -160,6 +174,40 @@ namespace AudioPlayer
 
         }
 
+        string SecToTime(double value, bool b)
+        {
+            // b - TimeSpan format
+            double h = Math.Floor(value / 360);
+            if (h > 0)
+            {
+                return h.ToString() + ':' + (Math.Floor(value / 60) % 60).ToString() + ':' + Math.Round(value % 60).ToString(); ;
+            }
+            if (b)
+            {
+                return "00:" + (Math.Floor(value / 60) % 60).ToString() + ':' + Math.Round(value % 60).ToString();
+            }
+            else
+            {
+                return (Math.Floor(value / 60) % 60).ToString() + ':' + Math.Round(value % 60).ToString();
+            }
+        }
+
+
+        double TimeSpanToDouble(TimeSpan time)
+        {
+            double seconds = 0;
+            double num;
+            int del = 3600;
+            foreach (string t in time.ToString().Split(':'))
+            {
+                
+                double.TryParse(t.Replace('.',','), out num);
+                seconds += num * del;
+                del /= 60;
+            }
+            return seconds;
+        }
+
         /// Events
         private void AddMediaButton_Click(object sender, RoutedEventArgs e)
         {
@@ -225,17 +273,14 @@ namespace AudioPlayer
                 }
                 if (File.Exists(path) && !(Player.Source?.ToString().Contains(path.Replace('\\', '/')) ?? false))
                 {
-                    double dur = new NAudio.Wave.MediaFoundationReader(path).TotalTime.TotalSeconds;
                     Player.Open(new Uri(path));
                     Player.Play();
                     _timer.Start();
                     playing = true;
-
-                    Current_Time.Maximum = dur;
                     Current_Time.Value = 0;
-                    MaxTime.Text = SecToTime(dur, false);
                     CTime.Text = "0:00";
                     (PlayPause.Template.FindName("Im", PlayPause) as Ellipse).Fill = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Audioplayer2;component/pause-button.png")));
+                    TryToGetTime();
                 }
                 else
                 {
@@ -284,12 +329,6 @@ namespace AudioPlayer
             }
         }
 
-        private void QueueButton_Click(object sender, RoutedEventArgs e)
-        {
-            TextB.Text = "Не работает, куда тыкаешь";
-
-        }
-
         private void Current_Time_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (Player.Source != null)
@@ -303,24 +342,6 @@ namespace AudioPlayer
         private void Current_Time_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             CTime.Text = SecToTime(Current_Time.Value, false);
-        }
-
-        string SecToTime(double value, bool b)
-        {
-            // b - TimeSpan format
-            double h = Math.Floor(value / 360);
-            if (h > 0)
-            {
-                return h.ToString() + ':' + (Math.Floor(value / 60) % 60).ToString() + ':' + Math.Round(value % 60).ToString(); ;
-            }
-            if (b)
-            {
-                return "00:" + (Math.Floor(value / 60) % 60).ToString() + ':' + Math.Round(value % 60).ToString();
-            }
-            else
-            {
-                return (Math.Floor(value / 60) % 60).ToString() + ':' + Math.Round(value % 60).ToString();
-            }
         }
 
         private void Current_Time_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

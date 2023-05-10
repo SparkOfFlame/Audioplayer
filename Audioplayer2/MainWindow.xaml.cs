@@ -269,7 +269,15 @@ namespace AudioPlayer
                 string path = medialist.Split('\n')[index];
                 if (path.Length < 2)
                 {
-                    path = medialist.Split('\n')[index + 1];
+                    try
+                    {
+                        path = medialist.Split('\n')[index + 1];
+                    }
+                    catch
+                    {
+
+                    }
+                    
                 }
                 if (File.Exists(path) && !(Player.Source?.ToString().Contains(path.Replace('\\', '/')) ?? false))
                 {
@@ -320,7 +328,15 @@ namespace AudioPlayer
                 int tag = int.Parse(lbi.Tag.ToString().Split('|')[0]);
                 if (lbi != null && tag == (int)btn.Tag)
                 {
-                    medialist = medialist.Remove(medialist.IndexOf(path), path.Length + 1);
+                    try
+                    {
+                        medialist = medialist.Remove(medialist.IndexOf(path), path.Length + 1);
+                    }
+                    catch
+                    {
+                        medialist = medialist.Remove(medialist.IndexOf(path), path.Length);
+                    }
+                    
                     MediaListBox.Items.Remove(item);
                     Refresh();
                     break;

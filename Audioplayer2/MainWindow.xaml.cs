@@ -117,7 +117,7 @@ namespace AudioPlayer
                 {
                     /// Запись в файл
                     addfile.WriteLine(a);
-                    medialist += "\n" + a;
+                    medialist += a + "\n";
                     AddToList(a);
                 }
             }
@@ -282,6 +282,7 @@ namespace AudioPlayer
                 if (File.Exists(path) && !(Player.Source?.ToString().Contains(path.Replace('\\', '/')) ?? false))
                 {
                     Player.Open(new Uri(path));
+                    
                     Player.Play();
                     _timer.Start();
                     playing = true;

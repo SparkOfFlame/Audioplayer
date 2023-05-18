@@ -19,7 +19,7 @@
             <Grid>
                 <ListBox x:Name="MediaListBox" Background="#FF1F1F1F" BorderBrush="#FF272729" Foreground="White" Margin="0,20,2,0" SelectionChanged="MediaListBox_SelectionChanged" Width="199" HorizontalAlignment="Left" VerticalAlignment="Top">
                 </ListBox>
-                <Button x:Name="MediaListButton" Content="Медиа список" HorizontalAlignment="Left" VerticalAlignment="Top" Width="101" Foreground="#FF271717" Height="20" Click="MediaListButton_Click">
+                <Button x:Name="MediaListButton" Content="Медиа список" HorizontalAlignment="Left" VerticalAlignment="Top" Width="101" Foreground="#FF271717" Height="20">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF16717A" Offset="0"/>
@@ -32,7 +32,7 @@
         <Slider x:Name="VolumeSlider" HorizontalAlignment="Left" Margin="500,38,0,0" VerticalAlignment="Top" Width="20" Height="235" Grid.Row="1" Orientation="Vertical" RenderTransformOrigin="0.5,0.5" OpacityMask="Black" Maximum="1" ValueChanged="VolumeSlider_ValueChanged" LargeChange="0.1" SmallChange="0.01" Value="0.5" IsMoveToPointEnabled="True"/>
         <Button x:Name="AddMediaButton" Content="Добавить аудио" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="105" Foreground="#FFB0B0B0" Background="#FF1F1F1F" Click="AddMediaButton_Click" Height="20"/>
 
-        <Slider x:Name="Current_Time" HorizontalAlignment="Left" Margin="60,315,0,0" Grid.Row="1" VerticalAlignment="Top" Width="420" Foreground="White" Background="#FF1F1F1F" Height="10" BorderBrush="#FF111111" LargeChange="0.1" IsMoveToPointEnabled="True" PreviewMouseLeftButtonUp="Current_Time_PreviewMouseLeftButtonUp" ValueChanged="Current_Time_ValueChanged" PreviewMouseLeftButtonDown="Current_Time_PreviewMouseLeftButtonDown"/>
+        <Slider x:Name="Current_Time" HorizontalAlignment="Left" Margin="60,315,0,0" Grid.Row="1" VerticalAlignment="Top" Width="420" Foreground="White" Background="#FF1F1F1F" Height="10" BorderBrush="#FF111111" LargeChange="0.1" IsMoveToPointEnabled="True" PreviewMouseLeftButtonUp="Current_Time_PreviewMouseLeftButtonUp" ValueChanged="Current_Time_ValueChanged" PreviewMouseLeftButtonDown="Current_Time_PreviewMouseLeftButtonDown" Maximum="0"/>
         <Button x:Name="PlayPause" Content="" HorizontalAlignment="Left" Margin="250,340,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="{x:Null}" Height="40" Click="PlayPause_Click" Width="40" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush/>
@@ -98,6 +98,7 @@
                 <TextBlock Name="MaxTime" TextWrapping="Wrap" Text="0:00" Foreground="White" Grid.Column="2"/>
             </Grid>
         </Border>
+        <Border BorderBrush="Gray" BorderThickness="1" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="593"/>
         <Image Source="pack://application:,,,/Audioplayer2;component/volume.png" HorizontalAlignment="Left" Height="25" Margin="497,273,0,0" Grid.Row="1" VerticalAlignment="Top" Width="26"/>
     </Grid>
 </Window>

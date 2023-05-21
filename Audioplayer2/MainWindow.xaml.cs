@@ -53,8 +53,7 @@ namespace AudioPlayer
                 MaxTime.Text = SecToTime(dur, false);
             }
             catch
-            {
-
+            { 
             }
         }
 

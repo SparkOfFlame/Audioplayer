@@ -44,13 +44,17 @@ namespace AudioPlayer
         {
             try
             {
+                while (!Player.NaturalDuration.HasTimeSpan)
+                {
+
+                }
                 double dur = TimeSpanToDouble(Player.NaturalDuration.TimeSpan);
                 Current_Time.Maximum = dur;
                 MaxTime.Text = SecToTime(dur, false);
             }
             catch
             {
-                TryToGetTime();
+
             }
         }
 
@@ -231,7 +235,6 @@ namespace AudioPlayer
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Player.Volume = VolumeSlider.Value;
-
         }
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
@@ -258,50 +261,53 @@ namespace AudioPlayer
 
         private void MediaListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            int index = MediaListBox.SelectedIndex;
-            if (index > -1)
+            try
             {
-                string path = medialist.Split('\n')[index];
-                if (path.Length < 2)
+                int index = MediaListBox.SelectedIndex;
+                if (index > -1)
                 {
-                    try
+                    string path = medialist.Split('\n')[index];
+                    if (path.Length < 2)
                     {
-                        path = medialist.Split('\n')[index + 1];
-                    }
-                    catch
-                    {
+                        try
+                        {
+                            path = medialist.Split('\n')[index + 1];
+                        }
+                        catch
+                        {
+
+                        }
 
                     }
-                    
-                }
-                if (File.Exists(path) && !(Player.Source?.ToString().Contains(path.Replace('\\', '/')) ?? false))
-                {
-                    Player.Open(new Uri(path));
-                    
-                    Player.Play();
-                    _timer.Start();
-                    playing = true;
-                    Current_Time.Value = 0;
-                    CTime.Text = "0:00";
-                    (PlayPause.Template.FindName("Im", PlayPause) as Ellipse).Fill = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Audioplayer2;component/pause-button.png")));
-                    TryToGetTime();
-                }
-                else
-                {
-                    if (!File.Exists(path))
+                    if (File.Exists(path) && !(Player.Source?.ToString().Contains(path.Replace('\\', '/')) ?? false))
                     {
-                        medialist = medialist.Remove(medialist.IndexOf(path), path.Length + 1);
-                        MediaListBox.Items.Remove(MediaListBox.SelectedItem);
-                        MediaListBox.SelectedIndex = -1;
-                        Refresh();
+                        Player.Open(new Uri(path));
 
+                        Player.Play();
+                        _timer.Start();
+                        playing = true;
+                        Current_Time.Value = 0;
+                        CTime.Text = "0:00";
+                        (PlayPause.Template.FindName("Im", PlayPause) as Ellipse).Fill = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Audioplayer2;component/pause-button.png")));
+                        TryToGetTime();
+                    }
+                    else
+                    {
+                        if (!File.Exists(path))
+                        {
+                            medialist = medialist.Remove(medialist.IndexOf(path), path.Length + 1);
+                            MediaListBox.Items.Remove(MediaListBox.SelectedItem);
+                            MediaListBox.SelectedIndex = -1;
+                            Refresh();
+
+                        }
                     }
                 }
-
+            }
+            catch
+            {
 
             }
-
-
         }
 
         private void Prev_Click(object sender, RoutedEventArgs e)
@@ -358,8 +364,6 @@ namespace AudioPlayer
             {
                 _timer.Start();
             }
-            
-
         }
 
         private void Current_Time_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

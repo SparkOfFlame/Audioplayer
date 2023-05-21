@@ -12,9 +12,7 @@
             <RowDefinition Height="20*"/>
             <RowDefinition Height="399*"/>
         </Grid.RowDefinitions>
-        <Border BorderThickness="1" BorderBrush="#FFB0B0B0" HorizontalAlignment="Left" Height="260" Margin="60,38,0,0" VerticalAlignment="Top" Width="420" Grid.Row="1">
-
-        </Border>
+        <Border BorderThickness="1" BorderBrush="#FFB0B0B0" HorizontalAlignment="Left" Height="260" Margin="60,38,0,0" VerticalAlignment="Top" Width="420" Grid.Row="1"/>
         <Border Margin="591,0,0,0" Grid.RowSpan="2">
             <Grid>
                 <ListBox x:Name="MediaListBox" Background="#FF1F1F1F" BorderBrush="#FF272729" Foreground="White" Margin="0,20,2,0" SelectionChanged="MediaListBox_SelectionChanged" Width="199" HorizontalAlignment="Left" VerticalAlignment="Top">
